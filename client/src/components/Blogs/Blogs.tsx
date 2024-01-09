@@ -5,7 +5,7 @@ import Posts from "../Posts/Posts";
 
 const Blogs = () => {
   return (
-    <section className="">
+    <section className="mb-60">
       <div className="max-w-[1400px] mx-auto p-6">
         <h1 className="text-center font-semibold text-5xl m-10">
           Explore our newest great posts 💖

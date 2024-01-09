@@ -15,3 +15,45 @@ body {
 .user-info {
   /* Adjust the value as needed */
 }
+
+.rsw-toolbar {
+  background-color: #1a1a1a !important;
+  border: 1px solid rgb(31 41 55);
+
+  button {
+    font-size: 25px;
+  }
+}
+.rsw-btn {
+  color: #fff;
+}
+
+.rsw-dd {
+  display: none;
+}
+.rsw-separator {
+  border: 1px solid rgb(31 41 55);
+}
+.rsw-editor {
+  width: 1200px;
+  height: 300px;
+  border: 1px solid rgb(31 41 55);
+}
+.rsw-ce {
+  border: 1px solid rgb(31 41 55);
+  outline: none;
+  word-wrap: break-word;
+}
+
+.css-1u9des2-indicatorSeparator {
+  display: none;
+}
+
+.css-1nmdiq5-menu {
+  background-color: #141414;
+  color: #fff;
+}
+
+.rsw-btn[data-active="true"] {
+  background: inherit;
+}
