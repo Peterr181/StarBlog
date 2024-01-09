@@ -12,7 +12,7 @@ interface CategoryData {
 
 const Categories: React.FC<CategoriesProps> = ({ categories }) => {
   return (
-    <div className="flex justify-center ">
+    <div className="flex justify-center  ">
       <ul className="flex gap-14">
         {categories.map((category, index) => (
           <Category key={index} categoryName={category.name} />

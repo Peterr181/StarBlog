@@ -6,7 +6,7 @@ interface categoryProps {
 
 const Category: React.FC<categoryProps> = ({ categoryName }) => {
   return (
-    <li className="border border-gray-800 cursor-pointer rounded-sm p-3">
+    <li className="border border-gray-800 cursor-pointer rounded-sm p-5 text-[#98989A]">
       {categoryName}
     </li>
   );

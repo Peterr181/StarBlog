@@ -6,4 +6,6 @@ body {
   color: #fff;
   font-family: "Inter", sans-serif;
   letter-spacing: 0.7px;
+  height: 100%;
+  background-color: #141414;
 }
