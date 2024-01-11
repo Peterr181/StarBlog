@@ -10,19 +10,9 @@ body {
   background-color: #141414;
 }
 
-.customclass {
-}
-.user-info {
-  /* Adjust the value as needed */
-}
-
 .rsw-toolbar {
   background-color: #1a1a1a !important;
   border: 1px solid rgb(31 41 55);
-
-  button {
-    font-size: 25px;
-  }
 }
 .rsw-btn {
   color: #fff;

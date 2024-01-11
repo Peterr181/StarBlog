@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import Editor from "react-simple-wysiwyg";
 
 interface PostCreatorProps {
-  setIsPostAdding: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsPostAdding?: React.Dispatch<React.SetStateAction<boolean>>;
+  mode: "editing" | "adding";
+  postTitle?: string;
+  postContent?: string;
 }
 
 interface NewPostData {
@@ -11,13 +14,18 @@ interface NewPostData {
   category: string;
 }
 
-const PostCreator: React.FC<PostCreatorProps> = ({ setIsPostAdding }) => {
+const PostCreator: React.FC<PostCreatorProps> = ({
+  setIsPostAdding,
+  mode,
+  postTitle,
+  postContent,
+}) => {
   const [html, setHtml] = useState("");
   const [title, setTitle] = useState("");
   function onChange(e: any) {
     setHtml(e.target.value);
   }
-
+  console.log(postTitle);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -33,7 +41,7 @@ const PostCreator: React.FC<PostCreatorProps> = ({ setIsPostAdding }) => {
   };
 
   const handleCancel = () => {
-    setIsPostAdding(false);
+    setIsPostAdding && setIsPostAdding(false);
   };
 
   const handleAddPost = () => {
@@ -60,14 +68,17 @@ const PostCreator: React.FC<PostCreatorProps> = ({ setIsPostAdding }) => {
       })
       .catch((error) => console.error("Error adding a new post:", error))
       .finally(() => {
-        setIsPostAdding(false);
+        setIsPostAdding && setIsPostAdding(false);
       });
   };
 
   return (
     <>
       <div className="flex flex-col">
-        <h1 className="text-center mb-10 text-2xl">Adding new post...</h1>
+        <h1 className="text-center mb-10 text-2xl">
+          {(mode === "adding" && "Adding new post...") ||
+            (mode === "editing" && "Editing post...")}
+        </h1>
         <div>
           <input
             type="text"
@@ -147,7 +158,7 @@ const PostCreator: React.FC<PostCreatorProps> = ({ setIsPostAdding }) => {
               </svg>
             </div>
             {isOpen && (
-              <div className="absolute mt-2 bg-[#141414] border border-gray-800 rounded-md customclass ">
+              <div className="absolute mt-2 bg-[#141414] border border-gray-800 rounded-md customclass z-10 ">
                 {options.map((option) => (
                   <div
                     key={option}

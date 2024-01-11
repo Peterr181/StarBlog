@@ -35,7 +35,7 @@ const Posts = () => {
               </svg>
             </div>
           ) : (
-            <PostCreator setIsPostAdding={setIsPostAdding} />
+            <PostCreator setIsPostAdding={setIsPostAdding} mode="adding" />
           )}
         </div>
       </div>
