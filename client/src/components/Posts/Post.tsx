@@ -60,7 +60,7 @@ const Post: React.FC = () => {
                 <p className="text-[#98989A]">{post.category}</p>
               </div>
             </div>
-            <div className="flex gap-2 flex-col">
+            <div className="flex gap-2 flex-col max-w-2xl w-1/2">
               <p className="mb-5 text-[#98989A]">
                 {formatDate(post.created_at)}
               </p>

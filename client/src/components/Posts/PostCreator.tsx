@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import Editor from "react-simple-wysiwyg";
-import Select from "react-select";
 
 interface PostCreatorProps {
   setIsPostAdding: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PostCreator: React.FC<PostCreatorProps> = ({ setIsPostAdding }) => {
-  const [html, setHtml] = useState("my <b>Enter content of post</b>");
+interface NewPostData {
+  title: string;
+  content: string;
+  category: string;
+}
 
+const PostCreator: React.FC<PostCreatorProps> = ({ setIsPostAdding }) => {
+  const [html, setHtml] = useState("");
+  const [title, setTitle] = useState("");
   function onChange(e: any) {
     setHtml(e.target.value);
   }
@@ -16,7 +21,7 @@ const PostCreator: React.FC<PostCreatorProps> = ({ setIsPostAdding }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const options = ["Option 1", "Option 2", "Option 3"];
+  const options = ["Technology", "Health", "Politics"];
 
   const handleSelectToggle = () => {
     setIsOpen(!isOpen);
@@ -31,13 +36,44 @@ const PostCreator: React.FC<PostCreatorProps> = ({ setIsPostAdding }) => {
     setIsPostAdding(false);
   };
 
+  const handleAddPost = () => {
+    const newPostData = {
+      title: title,
+      content: html,
+      category: selectedOption || "Default Category",
+    };
+
+    submitNewPost(newPostData);
+  };
+
+  const submitNewPost = (postData: NewPostData) => {
+    fetch("http://localhost/index.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("New post added:", data);
+      })
+      .catch((error) => console.error("Error adding a new post:", error))
+      .finally(() => {
+        setIsPostAdding(false);
+      });
+  };
+
   return (
     <>
       <div className="flex flex-col">
+        <h1 className="text-center mb-10 text-2xl">Adding new post...</h1>
         <div>
           <input
             type="text"
-            className="bg-[#141414] border border-gray-800 p-5 flex gap-3 items-center rounded-md cursor-pointer customclass outline-none mb-6 w-full"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="bg-[#1A1A1A] border border-gray-800 p-5 flex gap-3 items-center rounded-md customclass outline-none mb-6 w-full"
             placeholder="Title..."
           />
         </div>
@@ -56,7 +92,10 @@ const PostCreator: React.FC<PostCreatorProps> = ({ setIsPostAdding }) => {
         </div>
         <div className="flex items-center justify-between mt-10">
           <div className="flex gap-3">
-            <div className="bg-[#141414] border border-gray-800 p-5 flex gap-3 items-center rounded-md cursor-pointer customclass">
+            <div
+              className="bg-[#141414] border border-gray-800 p-5 flex gap-3 items-center rounded-md cursor-pointer customclass"
+              onClick={handleAddPost}
+            >
               <button>Add Post</button>
               <svg
                 width="24"
