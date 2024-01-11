@@ -1,11 +1,12 @@
 Functionalities in this blog written in React, TypeScript, Tailwind, vanilla PHP:
 
-    Adding/editing/deleting posts,
-    WYSIWYG graphical editor for posts with simple formatting tags,
-    Comment system for unregistered users,
-    Contact form,
-    Administrative panel with user authentication,
-    Various user access levels (administrator, author) with user management,
-    Post tagging/category system,
-    Utilization of CAPTCHA for protection against bots,
-    File uploading to the server.
+• dodawanie/edycja/usuwanie postów,
+• graficzny edytor WYSIWYG dla postów uwzględniający proste znaczniki formatujące,
+• system komentarzy dla niezarejestrowanych użytkowników,
+• formularz kontaktowy,
+• panel administracyjny z uwierzytelnianiem użytkowników,
+• różne poziomy dostępu użytkowników (administrator, autor) wraz z zarządzaniem
+użytkownikami,
+• system tagów / kategorii postów,
+• wykorzystanie CAPTCHy w celu zabezpieczenia przed botami,
+• wgrywanie plików na serwer.
