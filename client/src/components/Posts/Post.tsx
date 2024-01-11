@@ -16,7 +16,8 @@ interface Post {
 const Post: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
-  const [isEditingPost, setIsEditingPost] = useState(false);
+  const [isEditingPost, setIsEditingPost] = useState<boolean>(false);
+  const [isPostEditing, setIsPostEditing] = useState<boolean>(false);
 
   const formatDate = (timestamp: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -64,6 +65,11 @@ const Post: React.FC = () => {
   const handleEdit = (postId: number) => {
     setIsEditingPost(true);
     setEditingPostId(postId);
+  };
+
+  const closePostCreator = () => {
+    setIsEditingPost(false);
+    setEditingPostId(null);
   };
 
   console.log(posts);
@@ -226,6 +232,8 @@ const Post: React.FC = () => {
                   mode="editing"
                   postTitle={post.title}
                   postContent={post.content}
+                  setIsPostEditing={setIsPostEditing}
+                  closePostCreator={closePostCreator}
                 />
               </div>
             </>

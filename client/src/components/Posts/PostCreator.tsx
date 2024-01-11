@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import Editor from "react-simple-wysiwyg";
 
+type ClosePostCreator = () => void;
+
 interface PostCreatorProps {
   setIsPostAdding?: React.Dispatch<React.SetStateAction<boolean>>;
   mode: "editing" | "adding";
   postTitle?: string;
   postContent?: string;
+  setIsPostEditing?: React.Dispatch<React.SetStateAction<boolean>>;
+  closePostCreator?: ClosePostCreator;
 }
 
 interface NewPostData {
@@ -16,6 +20,8 @@ interface NewPostData {
 
 const PostCreator: React.FC<PostCreatorProps> = ({
   setIsPostAdding,
+  setIsPostEditing,
+  closePostCreator,
   mode,
   postTitle,
   postContent,
@@ -42,8 +48,12 @@ const PostCreator: React.FC<PostCreatorProps> = ({
 
   const handleCancel = () => {
     setIsPostAdding && setIsPostAdding(false);
-  };
+    if (mode === "editing") {
+      setIsPostEditing && setIsPostEditing(false);
+    }
 
+    closePostCreator && closePostCreator();
+  };
   const handleAddPost = () => {
     const newPostData = {
       title: title,
