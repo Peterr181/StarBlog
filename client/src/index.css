@@ -47,3 +47,7 @@ body {
 .rsw-btn[data-active="true"] {
   background: inherit;
 }
+
+.myModal {
+  background-color: red !important;
+}

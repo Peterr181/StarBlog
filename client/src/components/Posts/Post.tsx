@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import face from "../../assets/face.jpg";
 import PostCreator from "./PostCreator";
+import Comments from "../Comments/Comments";
+import Modal, { Styles } from "react-modal";
 
 interface Post {
   id: number;
@@ -13,11 +15,40 @@ interface Post {
   created_at: string;
 }
 
+interface Comment {
+  id: number;
+  postId: number;
+  text: string;
+}
+
 const Post: React.FC = () => {
+  const customStyles: Styles = {
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.75)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    content: {
+      backgroundColor: "white",
+      padding: "2rem",
+      borderRadius: "8px",
+      boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+      width: "600px",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)", // Center the modal
+      color: "#333",
+    },
+  };
   const [posts, setPosts] = useState<Post[]>([]);
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
   const [isEditingPost, setIsEditingPost] = useState<boolean>(false);
   const [isPostEditing, setIsPostEditing] = useState<boolean>(false);
+  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState<boolean>(false);
+  const [modalIsOpen, setIsOpen] = useState<boolean>(false);
 
   const formatDate = (timestamp: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -70,6 +101,23 @@ const Post: React.FC = () => {
   const closePostCreator = () => {
     setIsEditingPost(false);
     setEditingPostId(null);
+  };
+
+  const handleViewComments = (postId: number) => {
+    // Fetch comments for the selected post
+    fetch(`http://localhost/index.php/comments?id=${postId}`)
+      .then((response) => response.json())
+      .then((data) => setComments(data))
+      .catch((error) => console.error("Error fetching comments:", error));
+
+    setSelectedPostId(postId);
+    setIsCommentModalOpen(true);
+    setIsOpen(true);
+  };
+
+  const handleCloseCommentModal = () => {
+    setIsCommentModalOpen(false);
+    setSelectedPostId(null);
   };
 
   console.log(posts);
@@ -154,7 +202,10 @@ const Post: React.FC = () => {
                     )}
                     <button>{post.like_count}</button>
                   </div>
-                  <div className="bg-[#1A1A1A] border border-gray-800 p-2 rounded-lg text-[#98989A] flex items-center gap-1 cursor-pointer">
+                  <div
+                    onClick={() => handleViewComments(post.id)}
+                    className="bg-[#1A1A1A] border border-gray-800 p-2 rounded-lg text-[#98989A] flex items-center gap-1 cursor-pointer"
+                  >
                     <svg
                       width="24"
                       height="25"
@@ -241,6 +292,23 @@ const Post: React.FC = () => {
           )}
         </div>
       ))}
+      {isCommentModalOpen && selectedPostId !== null && (
+        <div className="">
+          {modalIsOpen && (
+            <Modal
+              isOpen={modalIsOpen}
+              style={customStyles}
+              ariaHideApp={false}
+            >
+              <button onClick={handleCloseCommentModal} className="">
+                &times;
+              </button>
+              <h2>Comments for Post #{selectedPostId}</h2>
+              <Comments postId={selectedPostId} comments={comments} />
+            </Modal>
+          )}
+        </div>
+      )}
     </div>
   );
 };
