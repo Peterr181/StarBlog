@@ -29,7 +29,7 @@ const Post: React.FC = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost/index.php")
+    fetch("http://localhost/react-blog/server/index.php")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -234,6 +234,7 @@ const Post: React.FC = () => {
                   postContent={post.content}
                   setIsPostEditing={setIsPostEditing}
                   closePostCreator={closePostCreator}
+                  postId={post.id}
                 />
               </div>
             </>
