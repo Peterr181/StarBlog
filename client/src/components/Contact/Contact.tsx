@@ -13,7 +13,7 @@ const Contact = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
-    const { firstName, email, message } = formData;
+    const { firstName, email, message, phone } = formData;
     console.log(firstName, email, message);
 
     fetch("http://localhost/react-blog/server/mail.php", {
@@ -25,6 +25,7 @@ const Contact = () => {
         firstName,
         email,
         message,
+        phone,
       }),
     })
       .then((response) => response.text())

@@ -1,0 +1,17 @@
+# Ignore configuration files
+/config.php
+
+# Ignore vendor folder (assuming you're using Composer)
+/vendor/
+
+# Ignore node_modules folder (assuming you're using npm or Yarn)
+/client/node_modules/
+
+# Ignore any log files
+/log/
+
+# Ignore any build artifacts
+/build/
+
+# Ignore any temporary files
+/tmp/
