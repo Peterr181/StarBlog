@@ -4,6 +4,7 @@ import PostCreator from "./PostCreator";
 
 const Posts = () => {
   const [isPostAdding, setIsPostAdding] = useState(false);
+  const [isNewPostAdded, setNewPostAdded] = useState<boolean>(false);
 
   const handleAddPost = () => {
     setIsPostAdding(!isPostAdding);
@@ -11,7 +12,7 @@ const Posts = () => {
 
   return (
     <div className="">
-      <Post />
+      <Post isNewPostAdded={isNewPostAdded} />
 
       <div className=" border-b-2 border-gray-800 ">
         <div className="flex justify-center   max-w-[1400px] mx-auto items-center p-12 ">
@@ -35,7 +36,11 @@ const Posts = () => {
               </svg>
             </div>
           ) : (
-            <PostCreator setIsPostAdding={setIsPostAdding} mode="adding" />
+            <PostCreator
+              setIsPostAdding={setIsPostAdding}
+              setNewPostAdded={setNewPostAdded}
+              mode="adding"
+            />
           )}
         </div>
       </div>

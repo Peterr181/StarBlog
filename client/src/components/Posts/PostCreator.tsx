@@ -11,6 +11,7 @@ interface PostCreatorProps {
   setIsPostEditing?: React.Dispatch<React.SetStateAction<boolean>>;
   closePostCreator?: ClosePostCreator;
   postId?: number;
+  setNewPostAdded?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface NewPostData {
@@ -27,6 +28,7 @@ const PostCreator: React.FC<PostCreatorProps> = ({
   postTitle,
   postContent,
   postId,
+  setNewPostAdded,
 }) => {
   const [html, setHtml] = useState("");
   const [title, setTitle] = useState("");
@@ -81,6 +83,9 @@ const PostCreator: React.FC<PostCreatorProps> = ({
   };
 
   const submitNewPost = (postData: NewPostData) => {
+    if (setNewPostAdded) {
+      setNewPostAdded((prev) => !prev);
+    }
     fetch("http://localhost/react-blog/server/index.php", {
       method: "POST",
       headers: {
