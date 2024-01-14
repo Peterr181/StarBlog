@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $sql = "INSERT INTO posts (title, content, category) VALUES ('$title', '$content', '$category')";
 
     if ($conn->query($sql) === TRUE) {
+        
         echo json_encode(['message' => 'New post added successfully']);
     } else {
         http_response_code(500);

@@ -14,6 +14,8 @@ interface CommentsProps {
   postId: number;
   comments: CommentForPost[];
   setComments: React.Dispatch<React.SetStateAction<CommentForPost[]>>;
+  setIsCommentAdded: React.Dispatch<React.SetStateAction<boolean>>;
+  updateCommentCount: any;
 }
 
 interface NewCommentData {
@@ -27,6 +29,8 @@ const Comments: React.FC<CommentsProps> = ({
   postId,
   comments,
   setComments,
+  setIsCommentAdded,
+  updateCommentCount,
 }) => {
   const [isAddingComment, setIsAddingComment] = useState(false);
   const [nickname, setNickname] = useState("");
@@ -68,17 +72,19 @@ const Comments: React.FC<CommentsProps> = ({
       .then((data) => {
         console.log("New comment added:", data);
 
-        // Update the state to include the new comment
         setComments((prevComments: CommentForPost[]) => [
           ...prevComments,
           data,
         ]);
+
+        updateCommentCount(postId, data.comment_count);
       })
       .catch((error) => console.error("Error adding a new comment:", error))
       .finally(() => {
         setIsAddingComment(false);
-        // Fetch comments again after adding a new comment
+
         fetchComments();
+        setIsCommentAdded(true);
       });
   };
 

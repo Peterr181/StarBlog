@@ -59,6 +59,11 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
   const [comments, setComments] = useState<CommentForPost[]>([]);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState<boolean>(false);
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
+  const [isCommentAdded, setIsCommentAdded] = useState<boolean>(false);
+  const [likedPosts, setLikedPosts] = useState<{ [postId: number]: boolean }>(
+    {}
+  );
+  const [isLikeAdded, setIsLikeAdded] = useState<boolean>(false);
 
   const formatDate = (timestamp: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -69,31 +74,55 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
     return new Date(timestamp).toLocaleDateString("en-US", options);
   };
 
+  const updateCommentCount = (postId: number, newCommentCount: number) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId ? { ...post, comment_count: newCommentCount } : post
+      )
+    );
+  };
+  const fetchPosts = () => {
+    fetch("http://localhost/react-blog/server/index.php")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => setPosts(data))
+      .catch((error) => console.error("Error fetching posts:", error));
+  };
   useEffect(() => {
-    const fetchPosts = () => {
-      fetch("http://localhost/react-blog/server/index.php")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => setPosts(data))
-        .catch((error) => console.error("Error fetching posts:", error));
-    };
-
     fetchPosts();
 
-    // Fetch posts again when isNewPostAdded is true
     if (isNewPostAdded || !isNewPostAdded) {
       fetchPosts();
     }
   }, [isNewPostAdded]);
 
-  const [isHeartClicked, setIsHeartClicked] = useState(false);
+  const handleClick = (postId: number) => {
+    const isLiked = likedPosts[postId];
 
-  const handleClick = () => {
-    setIsHeartClicked(!isHeartClicked);
+    // Toggle the liked status
+    setLikedPosts((prevLikedPosts) => ({
+      ...prevLikedPosts,
+      [postId]: !isLiked,
+    }));
+
+    // Make a POST request to likes.php to handle likes
+    fetch("http://localhost/react-blog/server/likes.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ postId, isLiked: !isLiked }), // Send the liked status
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Post liked:", data);
+        fetchPosts();
+      })
+      .catch((error) => console.error("Error liking the post:", error));
   };
 
   const handleDelete = (postId: number) => {
@@ -173,9 +202,9 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
                 <div className="flex gap-2 items-center mt-5">
                   <div
                     className="bg-[#1A1A1A] border border-gray-800 p-2 rounded-lg text-[#98989A] flex items-center gap-1 cursor-pointer"
-                    onClick={handleClick}
+                    onClick={() => handleClick(post.id)}
                   >
-                    {!isHeartClicked ? (
+                    {!likedPosts[post.id] ? (
                       <>{iconFile.heartOutline}</>
                     ) : (
                       <>{iconFile.heartFilled}</>
@@ -254,6 +283,8 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
                 postId={selectedPost.id}
                 comments={comments}
                 setComments={setComments}
+                setIsCommentAdded={setIsCommentAdded}
+                updateCommentCount={updateCommentCount}
               />
             </Modal>
           )}
