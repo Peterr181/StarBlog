@@ -1,5 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { formatDistanceToNow } from "date-fns";
+import ReCAPTCHA from "react-google-recaptcha";
+
+declare const process: {
+  env: {
+    REACT_APP_SITE_KEY: string;
+  };
+};
 
 interface CommentForPost {
   id: number;
@@ -36,13 +43,16 @@ const Comments: React.FC<CommentsProps> = ({
   const [nickname, setNickname] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const recaptcha = useRef<ReCAPTCHA | null>(null);
 
   useEffect(() => {
     fetchComments();
   }, [postId]);
 
   const fetchComments = () => {
-    fetch(`http://localhost/react-blog/server/comments.php?postId=${postId}`)
+    fetch(
+      `http://localhost/react-blog/server/api/src/comments/get/index.php?postId=${postId}`
+    )
       .then((response) => response.json())
       .then((data) => setComments(data))
       .catch((error) => console.error("Error fetching comments:", error));
@@ -54,6 +64,14 @@ const Comments: React.FC<CommentsProps> = ({
 
   const submitNewComment = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const captchaValue = recaptcha.current?.getValue();
+
+    if (!captchaValue) {
+      alert("Please verify the reCAPTCHA!");
+      return; // Prevent further execution if ReCAPTCHA is not completed
+    }
+
     const commentData: NewCommentData = {
       postId: postId,
       nickname: nickname,
@@ -61,7 +79,7 @@ const Comments: React.FC<CommentsProps> = ({
       content: content,
     };
 
-    fetch("http://localhost/react-blog/server/comments.php", {
+    fetch("http://localhost/react-blog/server/api/src/comments/add/index.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -136,6 +154,7 @@ const Comments: React.FC<CommentsProps> = ({
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
+              <ReCAPTCHA ref={(ref) => (recaptcha.current = ref)} sitekey="" />
               <div className="flex justify-center" onClick={submitNewComment}>
                 <button
                   type="submit"
