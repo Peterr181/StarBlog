@@ -26,10 +26,11 @@ interface CommentForPost {
 }
 
 interface PostProps {
-  isNewPostAdded: boolean;
+  isNewPostAdded: number;
+  setNewPostAdded?: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
+const Post: React.FC<PostProps> = ({ isNewPostAdded, setNewPostAdded }) => {
   const customStyles: Styles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.75)",
@@ -64,6 +65,11 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
     {}
   );
   const [isLikeAdded, setIsLikeAdded] = useState<boolean>(false);
+  console.log("Post component rendered");
+  console.log(isNewPostAdded);
+  useEffect(() => {
+    fetchPosts();
+  }, [isNewPostAdded]);
 
   const formatDate = (timestamp: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -82,7 +88,7 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
     );
   };
   const fetchPosts = () => {
-    fetch("http://localhost/react-blog/server/index.php")
+    fetch("http://localhost/react-blog/server/api/src/posts/get/index.php")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -92,13 +98,6 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
       .then((data) => setPosts(data))
       .catch((error) => console.error("Error fetching posts:", error));
   };
-  useEffect(() => {
-    fetchPosts();
-
-    if (isNewPostAdded || !isNewPostAdded) {
-      fetchPosts();
-    }
-  }, [isNewPostAdded]);
 
   const handleClick = (postId: number) => {
     const isLiked = likedPosts[postId];
@@ -110,7 +109,7 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
     }));
 
     // Make a POST request to likes.php to handle likes
-    fetch("http://localhost/react-blog/server/likes.php", {
+    fetch("http://localhost/react-blog/server/api/src/likes/add/index.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -126,9 +125,12 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
   };
 
   const handleDelete = (postId: number) => {
-    fetch(`http://localhost/index.php?id=${postId}`, {
-      method: "DELETE",
-    })
+    fetch(
+      `http://localhost/react-blog/server/api/src/posts/remove/index.php?id=${postId}`,
+      {
+        method: "DELETE",
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -152,7 +154,9 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
   };
 
   const handleViewComments = (postId: number) => {
-    fetch(`http://localhost/react-blog/server/comments.php?postId=${postId}`)
+    fetch(
+      `http://localhost/react-blog/server/api/src/comments/get/index.php?postId=${postId}`
+    )
       .then((response) => response.json())
       .then((data) => setComments(data))
       .catch((error) => console.error("Error fetching comments:", error));
@@ -168,8 +172,10 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
     setSelectedPost(null);
   };
 
+  // musze walnac setPosts jako props do postCreatora
+
   return (
-    <div>
+    <div key={isNewPostAdded}>
       {posts.map((post) => (
         <div key={post.id} className=" border-b-2 border-gray-800 ">
           {editingPostId !== post.id ? (
@@ -250,6 +256,7 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded }) => {
                   setIsPostEditing={setIsPostEditing}
                   closePostCreator={closePostCreator}
                   postId={post.id}
+                  setNewPostAdded={setNewPostAdded}
                 />
               </div>
             </>

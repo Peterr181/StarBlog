@@ -4,15 +4,17 @@ import PostCreator from "./PostCreator";
 
 const Posts = () => {
   const [isPostAdding, setIsPostAdding] = useState(false);
-  const [isNewPostAdded, setNewPostAdded] = useState<boolean>(false);
+  const [isNewPostAdded, setNewPostAdded] = useState<number>(0);
 
   const handleAddPost = () => {
     setIsPostAdding(!isPostAdding);
   };
 
+  console.log(isNewPostAdded, "Zrobilo sie jej haha");
+
   return (
-    <div className="">
-      <Post isNewPostAdded={isNewPostAdded} />
+    <div>
+      <Post isNewPostAdded={isNewPostAdded} setNewPostAdded={setNewPostAdded} />
 
       <div className=" border-b-2 border-gray-800 ">
         <div className="flex justify-center   max-w-[1400px] mx-auto items-center p-12 ">

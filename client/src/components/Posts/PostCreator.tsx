@@ -11,7 +11,7 @@ interface PostCreatorProps {
   setIsPostEditing?: React.Dispatch<React.SetStateAction<boolean>>;
   closePostCreator?: ClosePostCreator;
   postId?: number;
-  setNewPostAdded?: React.Dispatch<React.SetStateAction<boolean>>;
+  setNewPostAdded?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 interface NewPostData {
@@ -62,7 +62,8 @@ const PostCreator: React.FC<PostCreatorProps> = ({
 
     closePostCreator && closePostCreator();
   };
-  const handleAddPost = () => {
+  const handleAddPost = (e: any) => {
+    e.preventDefault();
     const newPostData = {
       title: title,
       content: html,
@@ -76,55 +77,72 @@ const PostCreator: React.FC<PostCreatorProps> = ({
     };
 
     if (mode === "adding") {
+      if (setNewPostAdded) {
+        setNewPostAdded((prev) => prev + 1);
+      }
       submitNewPost(newPostData);
     } else if (mode === "editing") {
+      if (setNewPostAdded) {
+        console.log("post zedytowany");
+        setNewPostAdded((prev) => prev + 1);
+      }
       submitEditingPost(editingPostData);
     }
   };
 
-  const submitNewPost = (postData: NewPostData) => {
-    if (setNewPostAdded) {
-      setNewPostAdded((prev) => !prev);
+  const submitNewPost = async (postData: NewPostData) => {
+    try {
+      const response = await fetch(
+        "http://localhost/react-blog/server/api/src/posts/add/index.php",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(postData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("New post added:", data);
+    } catch (error) {
+      console.error("Error adding a new post:", error);
+    } finally {
+      setIsPostAdding && setIsPostAdding(false);
     }
-    fetch("http://localhost/react-blog/server/index.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("New post added:", data);
-      })
-      .catch((error) => console.error("Error adding a new post:", error))
-      .finally(() => {
-        setIsPostAdding && setIsPostAdding(false);
-      });
   };
 
-  const submitEditingPost = (postData: NewPostData) => {
-    console.log("Submitting editing post with data:", postData);
+  const submitEditingPost = async (postData: NewPostData) => {
+    try {
+      const response = await fetch(
+        `http://localhost/react-blog/server/api/src/posts/update/index.php?id=${postId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(postData),
+        }
+      );
 
-    fetch(`http://localhost/index.php?id=${postId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Response from server:", data);
-        console.log("Post updated:", data);
-      })
-      .catch((error) => {
-        console.error("Error updating post:", error);
-      })
-      .finally(() => {
-        setIsPostEditing && setIsPostEditing(false);
-        closePostCreator && closePostCreator();
-      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // You can process the response data if needed
+      const data = await response.json();
+      console.log("Post updated:", data);
+    } catch (error) {
+      console.error("Error updating post:", error);
+    } finally {
+      setIsPostEditing && setIsPostEditing(false);
+
+      closePostCreator && closePostCreator();
+    }
   };
 
   return (
