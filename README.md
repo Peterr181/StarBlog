@@ -1,30 +1,27 @@
-Functionalities in this blog written in React, TypeScript, Tailwind, vanilla PHP:
 
-    Adding/Editing/Deleting Posts:
-        Functionality to add, edit, and delete posts.
+# BLOG
 
-    Graphical WYSIWYG Editor for Posts:
-        A graphical WYSIWYG editor for posts that includes simple formatting tags.
-
-    Comment System for Unregistered Users:
-        Comment system for users who are not registered.
-
-    Contact Form:
-        Implementation of a contact form.
-
-    Admin Panel with User Authentication:
-        Administrative panel with user authentication.
-
-    Different User Access Levels (Administrator, Author) with User Management:
-        Implementation of various user access levels (administrator, author) along with user management.
-
-    Tagging System / Post Categories:
-        System for tagging posts and categorizing them.
-
-    Utilization of CAPTCHA for Bot Protection:
-        Use of CAPTCHA to secure against bots.
-
-    File Upload to the Server:
-        Ability to upload files to the server.
+This is simple blog where user is able to add post, edit post and delete post. User is also able to add comments to each post and also like post. This blog also contains contact section where user can contact with website admin.
 
 
+Functionalities:
+
+Done:
+
+ - Adding/editing/deleting posts
+
+ - WYSIWYG graphical editor for posts with basic formatting tags
+
+ - Contact form
+
+ - Comment system for unregistered users
+
+ - Post tagging/category system
+
+ - Utilizing CAPTCHA for protection against bots
+
+To be done:
+
+- Administrative panel with user authentication
+ - Different user access levels (administrator, author) along with user management
+ - File uploading to the server
