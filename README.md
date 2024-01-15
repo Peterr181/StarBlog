@@ -25,3 +25,7 @@ To be done:
 - Administrative panel with user authentication
  - Different user access levels (administrator, author) along with user management
  - File uploading to the server
+
+
+Technologies used
+React, TypeScript, Tailwind, PHP
