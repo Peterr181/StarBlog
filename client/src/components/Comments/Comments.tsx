@@ -154,7 +154,10 @@ const Comments: React.FC<CommentsProps> = ({
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
-              <ReCAPTCHA ref={(ref) => (recaptcha.current = ref)} sitekey="" />
+              <ReCAPTCHA
+                ref={(ref) => (recaptcha.current = ref)}
+                sitekey="6Lfb1VApAAAAAGga8ia2-rQ4lz35_oBN-MbDDxAn"
+              />
               <div className="flex justify-center" onClick={submitNewComment}>
                 <button
                   type="submit"

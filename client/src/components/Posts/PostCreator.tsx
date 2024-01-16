@@ -12,6 +12,7 @@ interface PostCreatorProps {
   closePostCreator?: ClosePostCreator;
   postId?: number;
   setNewPostAdded?: React.Dispatch<React.SetStateAction<number>>;
+  fetchPosts?: () => void;
 }
 
 interface NewPostData {
@@ -29,6 +30,7 @@ const PostCreator: React.FC<PostCreatorProps> = ({
   postContent,
   postId,
   setNewPostAdded,
+  fetchPosts,
 }) => {
   const [html, setHtml] = useState("");
   const [title, setTitle] = useState("");
@@ -62,7 +64,7 @@ const PostCreator: React.FC<PostCreatorProps> = ({
 
     closePostCreator && closePostCreator();
   };
-  const handleAddPost = (e: any) => {
+  const handleAddPost = async (e: any) => {
     e.preventDefault();
     const newPostData = {
       title: title,
@@ -80,13 +82,15 @@ const PostCreator: React.FC<PostCreatorProps> = ({
       if (setNewPostAdded) {
         setNewPostAdded((prev) => prev + 1);
       }
-      submitNewPost(newPostData);
+      await submitNewPost(newPostData);
+      fetchPosts && fetchPosts();
     } else if (mode === "editing") {
       if (setNewPostAdded) {
         console.log("post zedytowany");
         setNewPostAdded((prev) => prev + 1);
       }
-      submitEditingPost(editingPostData);
+      await submitEditingPost(editingPostData);
+      fetchPosts && fetchPosts();
     }
   };
 

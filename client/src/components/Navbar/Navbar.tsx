@@ -1,5 +1,6 @@
 import React from "react";
 import star from "../../assets/star.png";
+import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <>
@@ -10,9 +11,11 @@ const Navbar = () => {
             <p className="font-medium">StarBlog</p>
           </div>
           <div>
-            <button className="bg-[#FFD11A] text-[#141414] rounded-lg p-14 md:p-14 lg:p-3 font-bold-sm font-medium">
-              Register
-            </button>
+            <Link to="/register">
+              <button className="bg-[#FFD11A] text-[#141414] rounded-lg p-14 md:p-14 lg:p-3 font-bold-sm font-medium">
+                Register
+              </button>
+            </Link>
           </div>
         </div>
       </nav>
