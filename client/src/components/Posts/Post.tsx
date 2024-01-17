@@ -4,11 +4,13 @@ import PostCreator from "./PostCreator";
 import Comments from "../Comments/Comments";
 import Modal, { Styles } from "react-modal";
 import { iconFile } from "../../utils/iconFile";
+import { useAuthentication } from "../../hooks/useAuthentication";
 
 interface Post {
   id: number;
   username: string;
   category: string;
+  user_id: string;
   title: string;
   content: string;
   like_count: number;
@@ -28,9 +30,14 @@ interface CommentForPost {
 interface PostProps {
   isNewPostAdded: number;
   setNewPostAdded?: React.Dispatch<React.SetStateAction<number>>;
+  selectedCategory: string;
 }
 
-const Post: React.FC<PostProps> = ({ isNewPostAdded, setNewPostAdded }) => {
+const Post: React.FC<PostProps> = ({
+  isNewPostAdded,
+  setNewPostAdded,
+  selectedCategory,
+}) => {
   const customStyles: Styles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.75)",
@@ -64,12 +71,13 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded, setNewPostAdded }) => {
   const [likedPosts, setLikedPosts] = useState<{ [postId: number]: boolean }>(
     {}
   );
-  const [isLikeAdded, setIsLikeAdded] = useState<boolean>(false);
-  console.log("Post component rendered");
-  console.log(isNewPostAdded);
+  const { user } = useAuthentication();
+
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [selectedCategory]);
+
+  console.log(posts);
 
   const formatDate = (timestamp: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -89,9 +97,15 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded, setNewPostAdded }) => {
   };
   const fetchPosts = async () => {
     try {
-      const response = await fetch(
-        "http://localhost/react-blog/server/api/src/posts/get/index.php"
-      );
+      let apiUrl =
+        "http://localhost/react-blog/server/api/src/posts/get/index.php";
+
+      // If a category is selected, append it to the API URL
+      if (selectedCategory !== "All") {
+        apiUrl += `?category=${selectedCategory}`;
+      }
+
+      const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -187,13 +201,15 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded, setNewPostAdded }) => {
         <div key={post.id} className=" border-b-2 border-gray-800 ">
           {editingPostId !== post.id ? (
             <div className="flex justify-between  max-w-[1400px] mx-auto items-center p-9 relative">
-              <div
-                className="absolute top-0 right-0 border border-gray-800 p-1 mt-2 cursor-pointer rounded-lg"
-                onClick={() => handleDelete(post.id)}
-              >
-                {iconFile.deleteIcon}
-              </div>
-              <div className="flex gap-6 items-center user-info">
+              {user?.id == post.user_id && (
+                <div
+                  className="absolute top-0 right-0 border border-gray-800 p-1 mt-2 cursor-pointer rounded-lg"
+                  onClick={() => handleDelete(post.id)}
+                >
+                  {iconFile.deleteIcon}
+                </div>
+              )}
+              <div className="flex gap-6 items-center user-info w-1/3">
                 <div>
                   <img
                     src={face}
@@ -206,12 +222,16 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded, setNewPostAdded }) => {
                   <p className="text-[#98989A]">{post.category}</p>
                 </div>
               </div>
-              <div className="flex gap-2 flex-col max-w-2xl w-1/2">
+              <div className="flex gap-2 flex-col  w-1/2">
                 <p className="mb-5 text-[#98989A]">
                   {formatDate(post.created_at)}
                 </p>
                 <h2>{post.title}</h2>
-                <p className="text-[#98989A]">{post.content}</p>
+
+                <p className="text-[#98989A] break-words mr-9">
+                  {post.content}
+                </p>
+
                 <div className="flex gap-2 items-center mt-5">
                   <div
                     className="bg-[#1A1A1A] border border-gray-800 p-2 rounded-lg text-[#98989A] flex items-center gap-1 cursor-pointer"
@@ -240,16 +260,18 @@ const Post: React.FC<PostProps> = ({ isNewPostAdded, setNewPostAdded }) => {
                   </button>
                   {iconFile.moreArrow}
                 </div>
-                <div
-                  className="bg-[#141414] border border-gray-800 p-3 flex gap-3 items-center rounded-md cursor-pointer"
-                  onClick={() => handleEdit(post.id)}
-                >
-                  <button className="" style={{ whiteSpace: "nowrap" }}>
-                    Edit
-                  </button>
+                {user?.id == post.user_id && (
+                  <div
+                    className="bg-[#141414] border border-gray-800 p-3 flex gap-3 items-center rounded-md cursor-pointer"
+                    onClick={() => handleEdit(post.id)}
+                  >
+                    <button className="" style={{ whiteSpace: "nowrap" }}>
+                      Edit
+                    </button>
 
-                  {iconFile.editIcon}
-                </div>
+                    {iconFile.editIcon}
+                  </div>
+                )}
               </div>
             </div>
           ) : (

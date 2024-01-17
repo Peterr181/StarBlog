@@ -5,6 +5,8 @@ import Category from "./Category";
 
 interface CategoriesProps {
   categories: CategoryData[];
+  setSelectedCategory: (categoryName: string) => void;
+  selectedCategory: string;
 }
 
 interface CategoryData {
@@ -12,9 +14,11 @@ interface CategoryData {
   name: string;
 }
 
-const Categories: React.FC<CategoriesProps> = ({ categories }) => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-
+const Categories: React.FC<CategoriesProps> = ({
+  setSelectedCategory,
+  selectedCategory,
+  categories,
+}) => {
   const handleCategoryClick = (categoryName: string) => {
     setSelectedCategory(categoryName);
   };

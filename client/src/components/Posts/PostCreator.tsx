@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Editor from "react-simple-wysiwyg";
+import { useAuthentication } from "../../hooks/useAuthentication";
 
 type ClosePostCreator = () => void;
 
@@ -38,6 +39,8 @@ const PostCreator: React.FC<PostCreatorProps> = ({
   const [existingTitle, setExistingTitle] = useState(postTitle || "");
   const [exisitngContent, setExistingConent] = useState(postContent || "");
 
+  const { user } = useAuthentication();
+
   function onChange(e: any) {
     setHtml(e.target.value);
   }
@@ -70,6 +73,8 @@ const PostCreator: React.FC<PostCreatorProps> = ({
       title: title,
       content: html,
       category: selectedOption || "Default Category",
+      user_id: user?.id,
+      username: user?.username,
     };
 
     const editingPostData = {
