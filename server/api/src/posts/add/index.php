@@ -12,8 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $title = $data['title'];
   $content = $data['content'];
   $category = $data['category'];
+  $user_id = $data['user_id'];
+  $username = $data['username'];
 
-  $sql = "INSERT INTO posts (title, content, category) VALUES ('$title', '$content', '$category')";
+  $sql = "INSERT INTO posts (title, content, category, user_id, username) VALUES ('$title', '$content', '$category', '$user_id', '$username')";
 
   if ($conn->query($sql) === TRUE) {
       
