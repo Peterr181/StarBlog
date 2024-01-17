@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $data->email;
     $password = $data->password;
     $repeatPassword = $data->repeatPassword;
+    $role = $data->role;
 
     // Sprawdź, czy hasła są identyczne
     if ($password !== $repeatPassword) {
@@ -59,6 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'id' => mysqli_insert_id($conn),
             'username' => $nickname,
             'email' => $email,
+            'role' => $role,
         ];
 
         echo json_encode(['success' => true, 'message' => 'User registered successfully', 'user' => $_SESSION['user']]);

@@ -4,6 +4,7 @@ interface User {
   id: string;
   username: string;
   email: string;
+  role: string;
 }
 
 interface Authentication {
@@ -26,9 +27,21 @@ export function useAuthentication(): Authentication {
   }, []);
 
   const handleLogin = (userData: User) => {
-    localStorage.setItem("user", JSON.stringify(userData));
+    const storedUser = localStorage.getItem("user");
+    let storedUserData: User | null = null;
+
+    if (storedUser) {
+      storedUserData = JSON.parse(storedUser);
+    }
+
+    // Update the role property if it exists in the new user data
+    if (storedUserData && userData.role) {
+      storedUserData.role = userData.role;
+    }
+
+    localStorage.setItem("user", JSON.stringify(storedUserData || userData));
     setLoggedIn(true);
-    setUser(userData);
+    setUser(storedUserData || userData);
   };
 
   const handleLogout = () => {

@@ -40,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               'id' => $user['id'],
               'username' => $user['username'],
               'email' => $user['email'],
+              'role' => $user['role'],
           ];
 
           // Return user data upon successful login
