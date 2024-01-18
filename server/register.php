@@ -4,7 +4,6 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 include "./api/config/dbConnection.php";
-include "auth.php";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -19,12 +18,19 @@ function hashPassword($password) {
 
 // Funkcja do ustawiania domyślnej roli użytkownika
 function getDefaultRole() {
-    return 'user';
+    return 'userGuest';
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Pobierz dane z formularza
     $data = json_decode(file_get_contents("php://input"));
+
+    
+
+   if(isset($_FILES['avatar'])){
+    $avatarPath = $_FILES['avatar']['name'];
+    $avatarTmp = $_FILES['avatar']['tmp_name'];
+    $destination = $_SERVER['DOCUMENT_ROOT'].'/server/avatars'."/".$avatarPath;
+   }
 
     $nickname = $data->nickname;
     $email = $data->email;
@@ -32,13 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $repeatPassword = $data->repeatPassword;
     $role = $data->role;
 
-    // Sprawdź, czy hasła są identyczne
     if ($password !== $repeatPassword) {
         echo json_encode(['success' => false, 'message' => 'Passwords do not match']);
         exit();
     }
 
-    // Sprawdź, czy użytkownik o podanym emailu już istnieje
     $checkUserQuery = "SELECT * FROM users WHERE email='$email'";
     $checkUserResult = $conn->query($checkUserQuery);
 
@@ -47,20 +51,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Zapisz nowego użytkownika do bazy danych
     $hashedPassword = hashPassword($password);
     $role = getDefaultRole();
 
-    $insertUserQuery = "INSERT INTO users (username, email, password, role) VALUES ('$nickname', '$email', '$hashedPassword', '$role')";
+    $insertUserQuery = "INSERT INTO users (username, email, password, role, avatar_path) VALUES ('$nickname', '$email', '$hashedPassword', '$role', '$avatarPath')";
+
+    if($result){
+        move_uploaded_file($avatarTmp, $destination);
+        echo json_encode(['success' => true,'message'=>'Avatar uploaded successfully']);
+    }
 
     if ($conn->query($insertUserQuery) === TRUE) {
-        // Set session variables after successful registration
         $_SESSION['authenticated'] = true;
         $_SESSION['user'] = [
             'id' => mysqli_insert_id($conn),
             'username' => $nickname,
             'email' => $email,
             'role' => $role,
+            
         ];
 
         echo json_encode(['success' => true, 'message' => 'User registered successfully', 'user' => $_SESSION['user']]);
@@ -69,6 +77,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Zakończ połączenie z bazą danych
 $conn->close();
 ?>
