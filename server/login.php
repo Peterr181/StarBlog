@@ -7,7 +7,7 @@ header("Content-Type: application/json");
 include "./api/config/dbConnection.php";
 
 // Start the session
-session_start();
+
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -33,31 +33,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $checkUserResult->fetch_assoc();
 
         // Sprawdź poprawność hasła
-        if (verifyPassword($password, $user['password'])) {
-          // Set session variables
-          $_SESSION['authenticated'] = true;
-          $_SESSION['user'] = [
-              'id' => $user['id'],
-              'username' => $user['username'],
-              'email' => $user['email'],
-              'role' => $user['role'],
-          ];
+        if (password_verify($password, $user['password'])) {
+            session_start();
+            $_SESSION['authenticated'] = true;
+            $_SESSION['id'] = $user['id'];
 
-          // Return user data upon successful login
-          echo json_encode([
-              'success' => true,
-              'message' => 'Login successful',
-              'user' => $_SESSION['user'],
-          ]);
-          exit(); // Ensure that no extra output is sent
-      } else {
-          echo json_encode(['success' => false, 'message' => 'Invalid password']);
-          exit();
-      }
-  } else {
-      echo json_encode(['success' => false, 'message' => 'User not found']);
-      exit();
-  }
+            // Return user data upon successful login
+            echo json_encode([
+                'success' => true,
+                'message' => 'Login successful',
+                'userId' => $_SESSION['id'],
+                'authenticated' => true,
+            ]);
+            exit(); // Ensure that no extra output is sent
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Invalid password']);
+            exit();
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'User not found']);
+        exit();
+    }
 }
 
 // Zakończ połączenie z bazą danych

@@ -7,14 +7,22 @@ const Register = () => {
     email: "",
     password: "",
     repeatPassword: "",
+    avatar: null as File | null,
   });
 
   const [passwordError, setPasswordError] = useState("");
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      setFormData({ ...formData, avatar: file });
+    }
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    const { nickname, email, password, repeatPassword } = formData;
+    const { nickname, email, password, repeatPassword, avatar } = formData;
 
     if (password !== repeatPassword) {
       setPasswordError("Passwords do not match");
@@ -34,6 +42,7 @@ const Register = () => {
             email,
             password,
             repeatPassword,
+            avatar,
           }),
         }
       );
@@ -121,6 +130,19 @@ const Register = () => {
                 className="rounded-md border border-solid border-gray-800 bg-[#1A1A1A] outline-none p-3"
               />
             </div>
+            <div className="flex flex-col gap-2 mt-9">
+              <label className="text-sm" htmlFor="avatar">
+                Avatar
+              </label>
+              <input
+                type="file"
+                name="avatar"
+                id="avatar"
+                placeholder="Enter Avatar URL"
+                className="rounded-md border border-solid border-gray-800 bg-[#1A1A1A] outline-none p-3"
+                onChange={handleFileChange}
+              />
+            </div>
             <div className="flex justify-between mt-9 flex-col gap-3">
               <div className="flex justify-center items-center">
                 <button
@@ -137,6 +159,7 @@ const Register = () => {
                   <span className="text-red-500">{passwordError}</span>
                 )}
               </div>
+
               <div className="flex flex-col justify-center items-center gap-6">
                 <p>Do you have an account on our blog?</p>
                 <Link to="/login">

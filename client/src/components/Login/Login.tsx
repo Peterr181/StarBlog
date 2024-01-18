@@ -9,29 +9,6 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // New state to track authentication status and user data
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    // Check authentication status on component mount
-    // You may want to make a request to the server to check the user's authentication status
-    // For demonstration purposes, I'll simulate an authenticated user using local storage
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setLoggedIn(true);
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
-  const handleLogout = () => {
-    // Perform logout operation (e.g., making a request to the server)
-    // For demonstration purposes, I'll clear local storage
-    localStorage.removeItem("user");
-    setLoggedIn(false);
-    setUser(null);
-  };
-
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -55,10 +32,8 @@ const Login = () => {
       const data = await response.json();
 
       if (data.success) {
-        // Store user data in local storage and update state
-        localStorage.setItem("user", JSON.stringify(data.user));
-        setLoggedIn(true);
-        setUser(data.user);
+        sessionStorage.setItem("userId", data.userId);
+        sessionStorage.setItem("isAuthenticated", data.authenticated);
         navigate("/");
       } else {
         setError(

@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Contact from "./components/Contact/Contact";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
+import Users from "./components/Users/Users";
 
 function App() {
   return (
@@ -22,6 +23,15 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route
+          path="/users"
+          element={
+            <>
+              <Navbar />
+              <Users />
+            </>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

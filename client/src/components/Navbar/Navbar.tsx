@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import star from "../../assets/star.png";
 import { Link } from "react-router-dom";
-import { useAuthentication } from "../../hooks/useAuthentication";
+import { useAuthData } from "../../hooks/useAuthData";
 import { useUserData } from "../../hooks/useUserData";
 
 const Navbar = () => {
-  const { loggedIn, user, handleLogout } = useAuthentication();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const userData = useUserData(user?.id);
-
-  console.log(userData, "Dane uzytkownika");
+  const { userId, isAuthenticated } = useAuthData();
+  const userData = useUserData(userId);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  console.log(user?.role);
+  const handleLogout = () => {
+    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("isAuthenticated");
+
+    window.location.reload();
+  };
 
   return (
     <>
@@ -28,9 +31,9 @@ const Navbar = () => {
 
           <div className="relative">
             <div className="cursor-pointer" onClick={toggleMenu} tabIndex={0}>
-              {loggedIn ? (
+              {userData ? (
                 <div className="flex items-center gap-3">
-                  <p className="text-white">{user && user.username}</p>
+                  <p className="text-white">{userData && userData.username}</p>
                   <svg
                     width="24"
                     height="24"
@@ -59,9 +62,11 @@ const Navbar = () => {
             {isMenuOpen && (
               <div className="absolute top-10 right-[-10px] bg-[#1A1A1A] p-6 rounded-md shadow-md text-center w-52">
                 {userData?.role === "admin" && (
-                  <p className="mt-3 mb-3 cursor-pointer  p-3">Users Panel</p>
+                  <Link to="/users">
+                    <p className="mt-3 mb-3 cursor-pointer  p-3">Users Panel</p>
+                  </Link>
                 )}
-                {loggedIn && (
+                {userData && (
                   <button
                     className="bg-[#FFD11A] text-[#141414] rounded-lg p-2 font-bold-sm font-medium"
                     onClick={handleLogout}

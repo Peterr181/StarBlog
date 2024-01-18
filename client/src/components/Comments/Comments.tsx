@@ -46,6 +46,7 @@ const Comments: React.FC<CommentsProps> = ({
   const recaptcha = useRef<ReCAPTCHA | null>(null);
 
   useEffect(() => {
+    console.log("Current postId:", postId);
     fetchComments();
   }, [postId]);
 
@@ -107,7 +108,7 @@ const Comments: React.FC<CommentsProps> = ({
   };
 
   const filteredComments = comments.filter(
-    (comment) => comment.postId === postId
+    (comment) => comment.postId == postId
   );
 
   const formatDateDistance = (timestamp: string) => {
@@ -116,6 +117,8 @@ const Comments: React.FC<CommentsProps> = ({
     });
     return distance;
   };
+
+  console.log(filteredComments);
 
   return (
     <div>

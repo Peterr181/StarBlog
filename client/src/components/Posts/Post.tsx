@@ -4,7 +4,8 @@ import PostCreator from "./PostCreator";
 import Comments from "../Comments/Comments";
 import Modal, { Styles } from "react-modal";
 import { iconFile } from "../../utils/iconFile";
-import { useAuthentication } from "../../hooks/useAuthentication";
+import { useAuthData } from "../../hooks/useAuthData";
+import { useUserData } from "../../hooks/useUserData";
 
 interface Post {
   id: number;
@@ -71,7 +72,8 @@ const Post: React.FC<PostProps> = ({
   const [likedPosts, setLikedPosts] = useState<{ [postId: number]: boolean }>(
     {}
   );
-  const { user } = useAuthentication();
+  const { userId, isAuthenticated } = useAuthData();
+  const userData = useUserData(userId);
 
   useEffect(() => {
     fetchPosts();
@@ -201,14 +203,15 @@ const Post: React.FC<PostProps> = ({
         <div key={post.id} className=" border-b-2 border-gray-800 ">
           {editingPostId !== post.id ? (
             <div className="flex justify-between  max-w-[1400px] mx-auto items-center p-9 relative">
-              {user?.id == post.user_id && (
-                <div
-                  className="absolute top-0 right-0 border border-gray-800 p-1 mt-2 cursor-pointer rounded-lg"
-                  onClick={() => handleDelete(post.id)}
-                >
-                  {iconFile.deleteIcon}
-                </div>
-              )}
+              {userData?.id == post.user_id ||
+                (userData?.role === "admin" && (
+                  <div
+                    className="absolute top-0 right-0 border border-gray-800 p-1 mt-2 cursor-pointer rounded-lg"
+                    onClick={() => handleDelete(post.id)}
+                  >
+                    {iconFile.deleteIcon}
+                  </div>
+                ))}
               <div className="flex gap-6 items-center user-info w-1/3">
                 <div>
                   <img
@@ -260,7 +263,7 @@ const Post: React.FC<PostProps> = ({
                   </button>
                   {iconFile.moreArrow}
                 </div>
-                {user?.id == post.user_id && (
+                {userData?.id == post.user_id && (
                   <div
                     className="bg-[#141414] border border-gray-800 p-3 flex gap-3 items-center rounded-md cursor-pointer"
                     onClick={() => handleEdit(post.id)}
