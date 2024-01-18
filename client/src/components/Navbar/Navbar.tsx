@@ -51,20 +51,38 @@ const Navbar = () => {
                   </svg>
                 </div>
               ) : (
-                <Link to="/register">
-                  <button className="bg-[#FFD11A] text-[#141414] rounded-lg p-14 md:p-14 lg:p-3 font-bold-sm font-medium">
-                    Register
-                  </button>
-                </Link>
+                <>
+                  <div className="flex gap-6">
+                    <Link to="/login">
+                      <button
+                        className="border border-yellow-400 text-[#fff] rounded-lg p-14 md:p-14 lg:p-3 font-bold-sm font-medium"
+                        name="register"
+                        type="submit"
+                        id="register-submit"
+                      >
+                        Login
+                      </button>
+                    </Link>
+                    <Link to="/register">
+                      <button className="bg-[#FFD11A] text-[#141414] rounded-lg p-14 md:p-14 lg:p-3 font-bold-sm font-medium">
+                        Register
+                      </button>
+                    </Link>
+                  </div>
+                </>
               )}
             </div>
 
             {isMenuOpen && (
-              <div className="absolute top-10 right-[-10px] bg-[#1A1A1A] p-6 rounded-md shadow-md text-center w-52">
+              <div className="absolute top-10 right-[-10px] bg-[#1A1A1A] p-6 rounded-md shadow-md text-center w-42 ">
                 {userData?.role === "admin" && (
-                  <Link to="/users">
-                    <p className="mt-3 mb-3 cursor-pointer  p-3">Users Panel</p>
-                  </Link>
+                  <div className="">
+                    <Link to="/users" className="">
+                      <p className="mt-3 mb-3 cursor-pointer  p-3">
+                        Users Panel
+                      </p>
+                    </Link>
+                  </div>
                 )}
                 {userData && (
                   <button

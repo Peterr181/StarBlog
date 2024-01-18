@@ -23,7 +23,7 @@ const Register = () => {
     e.preventDefault();
 
     const { nickname, email, password, repeatPassword, avatar } = formData;
-
+    console.log(avatar?.name);
     if (password !== repeatPassword) {
       setPasswordError("Passwords do not match");
       return;
@@ -49,7 +49,6 @@ const Register = () => {
 
       const data = await response.json();
 
-      // Handle the response data as needed
       console.log(data);
       setPasswordError("");
     } catch (error) {
@@ -138,7 +137,7 @@ const Register = () => {
                 type="file"
                 name="avatar"
                 id="avatar"
-                placeholder="Enter Avatar URL"
+                placeholder="Upload Avatar"
                 className="rounded-md border border-solid border-gray-800 bg-[#1A1A1A] outline-none p-3"
                 onChange={handleFileChange}
               />

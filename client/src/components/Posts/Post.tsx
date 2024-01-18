@@ -331,7 +331,7 @@ const Post: React.FC<PostProps> = ({
         </div>
       )}
       <div className="flex justify-center   max-w-[1400px] mx-auto items-center p-12 ">
-        {!isPostAdding ? (
+        {userData?.role !== "userGuest" && !isPostAdding && (
           <div
             className="bg-[#141414] border border-gray-800 p-5 flex gap-3 items-center rounded-md cursor-pointer customclass "
             onClick={handleAddPost}
@@ -350,7 +350,8 @@ const Post: React.FC<PostProps> = ({
               />
             </svg>
           </div>
-        ) : (
+        )}
+        {isPostAdding && (
           <PostCreator
             setNewPostAdded={(newPostId) => {
               setIsPostAdding(false);
