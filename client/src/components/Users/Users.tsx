@@ -3,11 +3,13 @@ import { useAuthData } from "../../hooks/useAuthData";
 import { useUserData } from "../../hooks/useUserData";
 import Modal, { Styles } from "react-modal";
 import User from "./User";
+import { Link } from "react-router-dom";
 
 interface Users {
   id: number;
   username: string;
   role: string;
+  avatar: string;
 }
 
 const Users = () => {
@@ -70,6 +72,8 @@ const Users = () => {
     fetchUsers();
   }, []);
 
+  console.log(users, "uzytkownicy");
+
   const customStyles: Styles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.75)",
@@ -98,17 +102,27 @@ const Users = () => {
         <h2 className="text-center font-semibold text-5xl m-10">
           All users that are registered on blog ✨
         </h2>
+        <Link to="/">
+          <div className="flex justify-center">
+            <button className="bg-[#FFD11A] text-[#141414] rounded-lg p-14 md:p-14 lg:p-3 font-bold-sm font-medium">
+              BACK TO HOME PAGE
+            </button>
+          </div>
+        </Link>
       </div>
       <div className="flex justify-center gap-6 border-t border-b p-6 border-[#262626]">
-        {users.map((user) => (
-          <User
-            key={user.id}
-            name={user.username}
-            handleDeleteCheck={() => handleDeleteCheck(user.id)}
-            handleAuthorize={() => handleAuthorize(user.id)}
-            isAuthorized={user.role === "userGuest"}
-          />
-        ))}
+        <div className="grid grid-cols-5 gap-6">
+          {users.map((user) => (
+            <User
+              key={user.id}
+              name={user.username}
+              handleDeleteCheck={() => handleDeleteCheck(user.id)}
+              handleAuthorize={() => handleAuthorize(user.id)}
+              isAuthorized={user.role === "userGuest"}
+              avatar={user.avatar}
+            />
+          ))}
+        </div>
         {checkDelete && (
           <Modal isOpen={modalIsOpen} style={customStyles} ariaHideApp={false}>
             <div className="flex justify-center items-center flex-col">

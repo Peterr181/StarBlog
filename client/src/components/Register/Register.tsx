@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Register = () => {
@@ -7,26 +7,36 @@ const Register = () => {
     email: "",
     password: "",
     repeatPassword: "",
-    avatar: null as File | null,
   });
 
   const [passwordError, setPasswordError] = useState("");
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
-    if (file) {
-      setFormData({ ...formData, avatar: file });
-    }
-  };
+  const selectedFile = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    const { nickname, email, password, repeatPassword, avatar } = formData;
-    console.log(avatar?.name);
+    const { nickname, email, password, repeatPassword } = formData;
+
+    if (selectedFile.current && selectedFile.current.files?.length === 0) {
+      console.log("There's no file uploaded");
+    } else {
+    }
+
     if (password !== repeatPassword) {
       setPasswordError("Passwords do not match");
       return;
+    }
+
+    const formDataInstance = new FormData();
+    formDataInstance.append("nickname", nickname);
+    formDataInstance.append("email", email);
+    formDataInstance.append("password", password);
+    formDataInstance.append("repeatPassword", repeatPassword);
+
+    const selectedAvatarFile = selectedFile.current?.files?.[0];
+    if (selectedAvatarFile) {
+      formDataInstance.append("avatar", selectedAvatarFile);
     }
 
     try {
@@ -34,16 +44,8 @@ const Register = () => {
         "http://localhost/react-blog/server/register.php",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nickname,
-            email,
-            password,
-            repeatPassword,
-            avatar,
-          }),
+
+          body: formDataInstance,
         }
       );
 
@@ -139,7 +141,7 @@ const Register = () => {
                 id="avatar"
                 placeholder="Upload Avatar"
                 className="rounded-md border border-solid border-gray-800 bg-[#1A1A1A] outline-none p-3"
-                onChange={handleFileChange}
+                ref={selectedFile}
               />
             </div>
             <div className="flex justify-between mt-9 flex-col gap-3">

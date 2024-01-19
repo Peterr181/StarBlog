@@ -5,6 +5,7 @@ interface UserData {
   username: string;
   email: string;
   role: string;
+  avatar: string;
 }
 
 export function useUserData(userId: any): UserData | null {

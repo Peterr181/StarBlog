@@ -17,6 +17,7 @@ interface Post {
   like_count: number;
   comment_count: number;
   created_at: string;
+  avatar: string;
 }
 
 interface CommentForPost {
@@ -97,6 +98,7 @@ const Post: React.FC<PostProps> = ({
       )
     );
   };
+
   const fetchPosts = async () => {
     try {
       let apiUrl =
@@ -213,13 +215,24 @@ const Post: React.FC<PostProps> = ({
                   </div>
                 ))}
               <div className="flex gap-6 items-center user-info w-1/3">
-                <div>
-                  <img
-                    src={face}
-                    alt="user face"
-                    className="rounded-full w-20 h-20"
-                  />
-                </div>
+                {post.avatar && (
+                  <div>
+                    <img
+                      src={`../../../../server/avatars/${post.avatar}`}
+                      alt="user face"
+                      className="rounded-full w-20 h-20"
+                    />
+                  </div>
+                )}
+                {!post.avatar && (
+                  <div>
+                    <img
+                      src={face}
+                      alt="user face"
+                      className="rounded-full w-20 h-20"
+                    />
+                  </div>
+                )}
                 <div className="flex flex-col">
                   <p>{post.username}</p>
                   <p className="text-[#98989A]">{post.category}</p>
