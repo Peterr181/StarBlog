@@ -1,31 +1,34 @@
+<h1 align="center" id="title">REACT PHP BLOG</h1>
 
-# BLOG
+<p id="description">It's simple blog created mainly with React on client side and PHP on server side. User's can add posts/edit/delete set their profile images add comments and more!</p>
 
-This is simple blog where user is able to add post, edit post and delete post. User is also able to add comments to each post and also like post. This blog also contains contact section where user can contact with website admin.
+  
+  
+<h2>🧐 Features</h2>
 
+Here're some of the project's best features:
 
-Functionalities:
+*   Adding post
+*   Deleting post
+*   Editing post
+*   Add comments
+*   Add likes to post
+*   WYSIWYG editor
+*   Working contact form
+*   reCaptcha for adding comments
+*   Administration panel for authorizing new users
+*   Categories for each post
+*   Uploading images to database
+*   Different user access levels
 
-Done:
+  
+  
+<h2>💻 Built with</h2>
 
- - Adding/editing/deleting posts
+Technologies used in the project:
 
- - WYSIWYG graphical editor for posts with basic formatting tags
-
- - Contact form
-
- - Comment system for unregistered users
-
- - Post tagging/category system
-
- - Utilizing CAPTCHA for protection against bots
-
-To be done:
-
-- Administrative panel with user authentication
- - Different user access levels (administrator, author) along with user management
- - File uploading to the server
-
-
-Technologies used
-React, TypeScript, Tailwind, PHP
+*   React
+*   Tailwind CSS
+*   PHP
+*   Typescript
+*   mySQL
