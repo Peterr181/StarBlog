@@ -32,3 +32,7 @@ Technologies used in the project:
 *   PHP
 *   Typescript
 *   mySQL
+
+
+![Zrzut ekranu 2024-01-19 201426](https://github.com/Peterr181/blog/assets/102172769/3e47af3e-6dfb-4ed2-8ecf-2f3c2fd6897b)
+
