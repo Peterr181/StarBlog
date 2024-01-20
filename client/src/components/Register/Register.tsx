@@ -155,6 +155,7 @@ const Register = () => {
                   Register
                 </button>
               </div>
+
               <div>
                 {passwordError && (
                   <span className="text-red-500">{passwordError}</span>

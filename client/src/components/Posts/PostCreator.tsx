@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Editor from "react-simple-wysiwyg";
-import { useAuthData} from "../../hooks/useAuthData";
+import { useAuthData } from "../../hooks/useAuthData";
 import { useUserData } from "../../hooks/useUserData";
 
 type ClosePostCreator = () => void;
@@ -50,7 +50,16 @@ const PostCreator: React.FC<PostCreatorProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const options = ["Technology", "Health", "Politics"];
+  const options = [
+    "Technology",
+    "Science",
+    "Sports",
+    "Technology",
+    "Politics",
+    "Health",
+    "Environment",
+    "Other",
+  ];
 
   const handleSelectToggle = () => {
     setIsOpen(!isOpen);
@@ -77,6 +86,7 @@ const PostCreator: React.FC<PostCreatorProps> = ({
       category: selectedOption || "Default Category",
       user_id: userData?.id,
       username: userData?.username,
+      avatar: userData?.avatar,
     };
 
     const editingPostData = {

@@ -24,31 +24,44 @@ const Navbar = () => {
     <>
       <nav className="bg-[#1A1A1A]">
         <div className="flex items-center justify-between p-6 max-w-[1400px] mx-auto">
-          <div className="flex items-center gap-3">
-            <img src={star} alt="star logo" className="w-12 h-12" />
-            <p className="font-medium">StarBlog</p>
-          </div>
+          <Link to="/">
+            <div className="flex items-center gap-3">
+              <img src={star} alt="star logo" className="w-12 h-12" />
+              <p className="font-medium">StarBlog</p>
+            </div>
+          </Link>
 
           <div className="relative">
             <div className="cursor-pointer" onClick={toggleMenu} tabIndex={0}>
               {userData ? (
-                <div className="flex items-center gap-3">
-                  <p className="text-white">{userData && userData.username}</p>
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M19.5 8.25L12 15.75L4.5 8.25"
-                      stroke="white"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                <div className="flex items-center gap-6">
+                  <div>
+                    <img
+                      src={`../../../public/avatars/${userData.avatar}`}
+                      alt="avatar"
+                      className="w-16 h-16 rounded-full"
                     />
-                  </svg>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <p className="text-white">
+                      {userData && userData.username}
+                    </p>
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M19.5 8.25L12 15.75L4.5 8.25"
+                        stroke="white"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
                 </div>
               ) : (
                 <>
@@ -74,9 +87,9 @@ const Navbar = () => {
             </div>
 
             {isMenuOpen && (
-              <div className="absolute top-10 right-[-10px] bg-[#1A1A1A] p-6 rounded-md shadow-md text-center w-42 ">
+              <div className="absolute top-30 right-[-30px] bg-[#1A1A1A]  rounded-md shadow-md text-center w-44 p-3  ">
                 {userData?.role === "admin" && (
-                  <div className="">
+                  <div className="w-full">
                     <Link to="/users" className="">
                       <p className="mt-3 mb-3 cursor-pointer  p-3">
                         Users Panel

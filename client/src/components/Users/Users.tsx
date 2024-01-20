@@ -72,7 +72,9 @@ const Users = () => {
     fetchUsers();
   }, []);
 
-  console.log(users, "uzytkownicy");
+  const filteredUsers = users.filter(
+    (user) => user.role === "user" || user.role === "userGuest"
+  );
 
   const customStyles: Styles = {
     overlay: {
@@ -110,9 +112,9 @@ const Users = () => {
           </div>
         </Link>
       </div>
-      <div className="flex justify-center gap-6 border-t border-b p-6 border-[#262626]">
-        <div className="grid grid-cols-5 gap-6">
-          {users.map((user) => (
+      <div className="flex justify-center gap-6 border-t border-b p-6 border-[#262626] items-center">
+        <div className="grid grid-cols-5 gap-6 justify-center items-center">
+          {filteredUsers.map((user) => (
             <User
               key={user.id}
               name={user.username}

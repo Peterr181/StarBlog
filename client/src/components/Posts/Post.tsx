@@ -218,7 +218,7 @@ const Post: React.FC<PostProps> = ({
                 {post.avatar && (
                   <div>
                     <img
-                      src={`../../../../server/avatars/${post.avatar}`}
+                      src={`../../../public/avatars/${post.avatar}`}
                       alt="user face"
                       className="rounded-full w-20 h-20"
                     />

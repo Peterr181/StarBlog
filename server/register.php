@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (in_array($fileExtension, $allowedExtensions)) {
             if ($uploaderrors === 0) {
                 $new_file_name = uniqid() . '.' . $fileExtension;
-                $file_destination = '../client/public/avatars./' . $new_file_name;
+                $file_destination = '../client/public/avatars/' . $new_file_name;
                 $avatarPath = $new_file_name;
 
                 if (move_uploaded_file($templocation, $file_destination)) {
