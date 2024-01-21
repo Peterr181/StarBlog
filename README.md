@@ -20,6 +20,7 @@ Here're some of the project's best features:
 *   Categories for each post
 *   Uploading images to database
 *   Different user access levels
+*   User authorization / Register / Login / Admin panel (user, guest, admin)
 
   
   
