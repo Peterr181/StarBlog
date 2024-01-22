@@ -122,6 +122,9 @@ const Post: React.FC<PostProps> = ({
 
   const handleClick = (postId: number) => {
     const isLiked = likedPosts[postId];
+    const userId = userData?.id;
+
+    console.log(userId);
 
     // Toggle the liked status
     setLikedPosts((prevLikedPosts) => ({
@@ -135,7 +138,7 @@ const Post: React.FC<PostProps> = ({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ postId, isLiked: !isLiked }), // Send the liked status
+      body: JSON.stringify({ postId, isLiked: !isLiked, userId }), // Send the liked status
     })
       .then((response) => response.json())
       .then((data) => {
@@ -249,17 +252,15 @@ const Post: React.FC<PostProps> = ({
                 </p>
 
                 <div className="flex gap-2 items-center mt-5">
-                  <div
-                    className="bg-[#1A1A1A] border border-gray-800 p-2 rounded-lg text-[#98989A] flex items-center gap-1 cursor-pointer"
-                    onClick={() => handleClick(post.id)}
-                  >
-                    {!likedPosts[post.id] ? (
-                      <>{iconFile.heartOutline}</>
-                    ) : (
-                      <>{iconFile.heartFilled}</>
-                    )}
-                    <button>{post.like_count}</button>
-                  </div>
+                  {userData && (
+                    <div
+                      className="bg-[#1A1A1A] border border-gray-800 p-2 rounded-lg text-[#98989A] flex items-center gap-1 cursor-pointer"
+                      onClick={() => handleClick(post.id)}
+                    >
+                      {iconFile.heartOutline}
+                      <button>{post.like_count}</button>
+                    </div>
+                  )}
                   <div
                     onClick={() => handleViewComments(post.id)}
                     className="bg-[#1A1A1A] border border-gray-800 p-2 rounded-lg text-[#98989A] flex items-center gap-1 cursor-pointer"
