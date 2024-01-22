@@ -122,6 +122,7 @@ const Users = () => {
               handleAuthorize={() => handleAuthorize(user.id)}
               isAuthorized={user.role === "userGuest"}
               avatar={user.avatar}
+              role={user.role}
             />
           ))}
         </div>

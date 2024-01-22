@@ -8,6 +8,7 @@ interface userProps {
   handleAuthorize: () => void;
   isAuthorized: boolean;
   avatar: string;
+  role: string;
 }
 
 const User = ({
@@ -15,6 +16,7 @@ const User = ({
   handleDeleteCheck,
   handleAuthorize,
   isAuthorized,
+  role,
   avatar,
 }: userProps) => {
   const { userId } = useAuthData();
@@ -49,6 +51,11 @@ const User = ({
             >
               Authorize
             </button>
+          </div>
+        )}
+        {!isAuthorized && (
+          <div className="border border-green-500  text-[#fff] rounded-lg p-14 md:p-14 lg:p-3 font-bold-sm font-medium mt-6 mb-6">
+            {role}
           </div>
         )}
       </div>

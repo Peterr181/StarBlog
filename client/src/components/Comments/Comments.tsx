@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { formatDistanceToNow } from "date-fns";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useAuthData } from "../../hooks/useAuthData";
+import { useUserData } from "../../hooks/useUserData";
 
 declare const process: {
   env: {
@@ -45,6 +47,9 @@ const Comments: React.FC<CommentsProps> = ({
   const [content, setContent] = useState("");
   const recaptcha = useRef<ReCAPTCHA | null>(null);
 
+  const { userId, isAuthenticated } = useAuthData();
+  const userData = useUserData(userId);
+
   useEffect(() => {
     console.log("Current postId:", postId);
     fetchComments();
@@ -70,12 +75,12 @@ const Comments: React.FC<CommentsProps> = ({
 
     if (!captchaValue) {
       alert("Please verify the reCAPTCHA!");
-      return; // Prevent further execution if ReCAPTCHA is not completed
+      return;
     }
 
     const commentData: NewCommentData = {
       postId: postId,
-      nickname: nickname,
+      nickname: userData ? userData.username : nickname,
       title: title,
       content: content,
     };
@@ -136,13 +141,15 @@ const Comments: React.FC<CommentsProps> = ({
         {isAddingComment && (
           <div>
             <form className="flex flex-col gap-8">
-              <input
-                type="text"
-                placeholder="Enter your nickname..."
-                className="bg-[#141414] border border-gray-800 p-5 flex gap-3 items-center rounded-md  customclass outline-none"
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-              />
+              {!userData && (
+                <input
+                  type="text"
+                  placeholder="Enter your nickname..."
+                  className="bg-[#141414] border border-gray-800 p-5 flex gap-3 items-center rounded-md  customclass outline-none"
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
+                />
+              )}
               <input
                 type="text"
                 placeholder="Enter comment title..."
