@@ -31,6 +31,12 @@ Technologies used in the project:
 *   React
 *   Tailwind CSS
 *   PHP
+
+
+<h2>Use case diagram</h2>
+
+![obraz](https://github.com/Peterr181/blog/assets/102172769/50f8e08b-9594-47c8-a691-465d508f0ef9)
+
 *   Typescript
 *   mySQL
 
