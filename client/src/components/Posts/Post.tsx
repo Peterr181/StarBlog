@@ -202,21 +202,24 @@ const Post: React.FC<PostProps> = ({
     setIsPostAdding((prevIsPostAdding) => !prevIsPostAdding);
   };
 
+  console.log(posts);
+
   return (
     <div>
       {posts.map((post) => (
         <div key={post.id} className=" border-b-2 border-gray-800 ">
           {editingPostId !== post.id ? (
             <div className="flex justify-between  max-w-[1400px] mx-auto items-center p-9 relative">
-              {userData?.id == post.user_id ||
-                (userData?.role === "admin" && (
-                  <div
-                    className="absolute top-0 right-0 border border-gray-800 p-1 mt-2 cursor-pointer rounded-lg"
-                    onClick={() => handleDelete(post.id)}
-                  >
-                    {iconFile.deleteIcon}
-                  </div>
-                ))}
+              {(userData?.id === post.user_id ||
+                userData?.role === "admin") && (
+                <div
+                  className="absolute top-0 right-0 border border-gray-800 p-1 mt-2 cursor-pointer rounded-lg"
+                  onClick={() => handleDelete(post.id)}
+                >
+                  {iconFile.deleteIcon}
+                </div>
+              )}
+
               <div className="flex gap-6 items-center user-info w-1/3">
                 {post.avatar && (
                   <div>
@@ -277,7 +280,8 @@ const Post: React.FC<PostProps> = ({
                   </button>
                   {iconFile.moreArrow}
                 </div>
-                {userData?.id == post.user_id && (
+                {(userData?.id === post.user_id ||
+                  userData?.role === "admin") && (
                   <div
                     className="bg-[#141414] border border-gray-800 p-3 flex gap-3 items-center rounded-md cursor-pointer"
                     onClick={() => handleEdit(post.id)}
@@ -285,7 +289,6 @@ const Post: React.FC<PostProps> = ({
                     <button className="" style={{ whiteSpace: "nowrap" }}>
                       Edit
                     </button>
-
                     {iconFile.editIcon}
                   </div>
                 )}
