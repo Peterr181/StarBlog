@@ -43,9 +43,12 @@ const Navbar = () => {
                     />
                   </div>
                   <div className="flex items-center gap-3">
-                    <p className="text-white">
-                      {userData && userData.username}
-                    </p>
+                    <div>
+                      <p className="text-white text-md">
+                        {userData && userData.username}
+                      </p>
+                      <p className="text-[#FFFF00] text-sm">{userData?.role}</p>
+                    </div>
                     <svg
                       width="24"
                       height="24"
